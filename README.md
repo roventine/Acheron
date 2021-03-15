@@ -1,2 +1,2 @@
 # Acheron
-proxy / port forwarding based on netty
+proxy / port forwarding/ file transfer based on netty
