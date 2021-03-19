@@ -5,11 +5,11 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-public class ClientHandler extends ChannelInboundHandlerAdapter {
+public class ForwardServerTargetHandler extends ChannelInboundHandlerAdapter {
 
     private final Channel sourceChannel;
 
-    public ClientHandler(Channel sourceChannel) {
+    public ForwardServerTargetHandler(Channel sourceChannel) {
         this.sourceChannel = sourceChannel;
     }
 

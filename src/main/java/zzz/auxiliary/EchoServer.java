@@ -9,11 +9,13 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
+import io.netty.util.CharsetUtil;
 
 
 public final class EchoServer {
@@ -21,6 +23,8 @@ public final class EchoServer {
     static final int PORT = Integer.parseInt(System.getProperty("port", "8007"));
 
     public static void main(String[] args) throws Exception {
+
+
 
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -33,9 +37,15 @@ public final class EchoServer {
              .handler(new LoggingHandler(LogLevel.INFO))
              .childHandler(new ChannelInitializer<SocketChannel>() {
                  @Override
-                 public void initChannel(SocketChannel ch) throws Exception {
+                 public void initChannel(SocketChannel ch)  {
                      ChannelPipeline p = ch.pipeline();
-                     p.addLast(serverHandler);
+                     p.addLast(
+
+                             new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,4,0,4),
+                             new StringDecoder(CharsetUtil.UTF_8),
+                             new LengthFieldPrepender(4),
+                             new StringEncoder(CharsetUtil.UTF_8),
+                             new EchoServerHandler());
                  }
              });
 

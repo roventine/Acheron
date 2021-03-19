@@ -10,14 +10,14 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
 
-public class ServerHandler extends ChannelInboundHandlerAdapter {
+public class ForwardServerSourceHandler extends ChannelInboundHandlerAdapter {
 
     private Channel destChannel = null;
     private final SocketAddress destAddr;
 
 
 
-    public ServerHandler(SocketAddress destAddr) {
+    public ForwardServerSourceHandler(SocketAddress destAddr) {
         this.destAddr = destAddr;
     }
 
@@ -36,7 +36,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
                         socketChannel.pipeline()
-                                .addLast(new ClientHandler(ctx.channel()));
+                                .addLast(new ForwardServerTargetHandler(ctx.channel()));
                     }
                 })
                 .connect(destAddr)

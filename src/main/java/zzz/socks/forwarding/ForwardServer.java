@@ -9,14 +9,13 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import java.net.InetSocketAddress;
 
-public class Forwarder {
+public class ForwardServer {
+
+    static final int PORT = 8009;
 
     public static void main(String[] args) throws InterruptedException {
 
-        int port = 8008;
-
-        InetSocketAddress destAddr = new InetSocketAddress("127.0.0.1",port);
-        System.out.println("Listen on port : [" + port + "]");
+        InetSocketAddress destAddr = new InetSocketAddress("127.0.0.1",8007);
         new ServerBootstrap()
                 .group(new NioEventLoopGroup())
                 .channel(NioServerSocketChannel.class)
@@ -25,10 +24,10 @@ public class Forwarder {
                     protected void initChannel(SocketChannel socketChannel) {
                         socketChannel.config().setAutoRead(false);
                         socketChannel.pipeline()
-                                .addLast(new ServerHandler(destAddr));
+                                .addLast(new ForwardServerSourceHandler(destAddr));
                     }
                 })
-                .bind(port)
+                .bind(PORT)
                 .sync();
     }
 }
