@@ -24,7 +24,7 @@ import io.netty.util.CharsetUtil;
 public final class EchoClient {
 
     static final String HOST = System.getProperty("host", "127.0.0.1");
-    static final int PORT = Integer.parseInt(System.getProperty("port", "8009"));
+    static final int PORT = Integer.parseInt(System.getProperty("port", "1080"));
 
 
 
@@ -40,7 +40,7 @@ public final class EchoClient {
 
             Bootstrap b = new Bootstrap();
             String finalMsg = msg;
-            System.out.println(finalMsg.length());
+//            System.out.println(finalMsg.length());
             b.group(group)
              .channel(NioSocketChannel.class)
              .option(ChannelOption.TCP_NODELAY, true)
